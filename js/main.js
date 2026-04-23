@@ -65,6 +65,42 @@ function initReveal() {
   });
 }
 
+function loadProjects() {
+  const grid = document.getElementById('projectsGrid');
+  if (!grid) return;
+
+  fetch('data/projects.json')
+    .then(res => {
+      if (!res.ok) throw new Error('Réponse réseau invalide');
+      return res.json();
+    })
+    .then(projects => {
+      grid.innerHTML = projects.map(project => {
+        const techs = project.techs
+          .map(t => `<span class="card__tech">${t}</span>`)
+          .join('');
+        const isExternal = project.url && project.url !== '#';
+        const linkAttrs = isExternal ? ' target="_blank" rel="noopener"' : '';
+        return `
+          <article class="card">
+            <div class="card__banner"></div>
+            <div class="card__header">
+              <h3 class="card__title">${project.name}</h3>
+            </div>
+            <p class="card__body">${project.description}</p>
+            <div class="card__techs">${techs}</div>
+            <div class="card__links">
+              <a href="${project.url}" class="btn btn--outline" aria-label="Voir le projet ${project.name}"${linkAttrs}>Voir le projet</a>
+            </div>
+          </article>`;
+      }).join('');
+    })
+    .catch(() => {
+      grid.innerHTML = '<p class="projects__error">Impossible de charger les projets.</p>';
+    });
+}
+
 initNav();
 initTheme();
 initReveal();
+loadProjects();
