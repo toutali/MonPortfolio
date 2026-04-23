@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Portfolio de Taliby TOURE — Développeur en formation" />
+    <meta property="og:title" content="Taliby TOURE — Portfolio" />
+    <meta property="og:description" content="Portfolio de Taliby TOURE — Développeur en formation" />
+    <meta property="og:image" content="assets/images/PSG6.jpg" />
+    <meta property="og:type" content="website" />
+    <title>Taliby TOURE — Portfolio</title>
+    <script>
+      (function () {
+        var t = localStorage.getItem('theme') ||
+                (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+        document.documentElement.setAttribute('data-theme', t);
+      }());
+    </script>
+    <style>
+      :root                    { --color-bg: #0a0a0a; --color-text: #e0e0e0; }
+      html[data-theme="light"] { --color-bg: #ffffff; --color-text: #1a1a1a; }
+      body                     { background-color: var(--color-bg); color: var(--color-text); }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+
+    <!-- ===== HEADER / NAV ===== -->
+    <header class="header">
+      <nav class="nav container" aria-label="Navigation principale">
+        <a href="#hero" class="nav__logo">MonPortfolio</a>
+        <ul class="nav__links" id="navLinks">
+          <li><a href="#about">À propos</a></li>
+          <li><a href="#projects">Projets</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+        <div class="nav__actions">
+          <button class="nav__theme-toggle" id="themeToggle" aria-label="Passer en mode clair">
+            <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="5"/>
+              <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+              <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+            </svg>
+            <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+          </button>
+          <button class="nav__toggle" id="navToggle" aria-label="Ouvrir le menu" aria-expanded="false">
+            <span class="nav__hamburger"></span>
+          </button>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+
+      <!-- ===== HERO ===== -->
+      <section id="hero" class="hero">
+        <div class="container hero__content">
+          <p class="hero__eyebrow">Bonjour, je suis</p>
+          <h1 class="hero__title">Taliby TOURE</h1>
+          <p class="hero__subtitle">Développeur en formation</p>
+          <p class="hero__tagline">Je construis des projets concrets avec l'IA.</p>
+          <a href="#projects" class="btn btn--primary">Voir mes projets</a>
+        </div>
+      </section>
+
+      <!-- ===== À PROPOS ===== -->
+      <section id="about" class="about section">
+        <div class="container">
+          <h2 class="section__title">À propos</h2>
+          <div class="about__grid">
+            <div class="about__photo">
+              <img src="assets/images/PSG6.jpg" alt="Photo de profil" class="about__photo-img" loading="lazy" />
+            </div>
+            <div class="about__text">
+              <p>
+                Passionné par la technologie et l'intelligence artificielle,
+                j'apprends à construire des projets concrets en utilisant les
+                outils les plus avancés du marché. Ce portfolio est lui-même
+                construit avec Claude Code.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== PROJETS ===== -->
+      <section id="projects" class="projects section">
+        <div class="container">
+          <h2 class="section__title">Mes Projets</h2>
+          <div class="projects__grid">
+
+            <article class="card">
+              <div class="card__banner"></div>
+              <div class="card__header">
+                <h3 class="card__title">MonPortfolio</h3>
+              </div>
+              <p class="card__body">
+                Mon portfolio développeur, construit entièrement avec Claude Code.
+              </p>
+              <div class="card__techs">
+                <span class="card__tech">HTML</span>
+                <span class="card__tech">CSS</span>
+                <span class="card__tech">JavaScript</span>
+                <span class="card__tech">Claude Code</span>
+              </div>
+              <div class="card__links">
+                <a href="#" class="btn btn--outline" aria-label="Voir le projet MonPortfolio">Voir le projet</a>
+              </div>
+            </article>
+
+            <article class="card">
+              <div class="card__banner"></div>
+              <div class="card__header">
+                <h3 class="card__title">Calculatrice CLI</h3>
+              </div>
+              <p class="card__body">
+                Une calculatrice en ligne de commande en Python.
+              </p>
+              <div class="card__techs">
+                <span class="card__tech">Python</span>
+                <span class="card__tech">CLI</span>
+              </div>
+              <div class="card__links">
+                <a href="#" class="btn btn--outline" aria-label="Voir le projet Calculatrice CLI">Voir le projet</a>
+              </div>
+            </article>
+
+            <article class="card">
+              <div class="card__banner"></div>
+              <div class="card__header">
+                <h3 class="card__title">API Notes</h3>
+              </div>
+              <p class="card__body">
+                Une API REST pour gérer des notes personnelles.
+              </p>
+              <div class="card__techs">
+                <span class="card__tech">Node.js</span>
+                <span class="card__tech">Express</span>
+                <span class="card__tech">REST API</span>
+              </div>
+              <div class="card__links">
+                <a href="#" class="btn btn--outline" aria-label="Voir le projet API Notes">Voir le projet</a>
+              </div>
+            </article>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== CONTACT ===== -->
+      <section id="contact" class="contact section">
+        <div class="container contact__inner">
+          <h2 class="section__title" id="contactTitle">Me contacter</h2>
+          <p class="contact__lead">
+            Un projet, une question ? Écrivez-moi.
+          </p>
+          <form class="contact__form" id="contactForm" novalidate aria-labelledby="contactTitle">
+            <div class="form__group">
+              <label for="name">Nom</label>
+              <input type="text" id="name" name="name" placeholder="Votre nom" required />
+            </div>
+            <div class="form__group">
+              <label for="email">E-mail</label>
+              <input type="email" id="email" name="email" placeholder="votre@email.com" required />
+            </div>
+            <div class="form__group">
+              <label for="message">Message</label>
+              <textarea id="message" name="message" rows="5" placeholder="Votre message…" required></textarea>
+            </div>
+            <button type="submit" class="btn btn--primary">Envoyer</button>
+          </form>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer">
+      <div class="container footer__inner">
+        <p class="footer__copy">&copy; 2026 Taliby TOURE &mdash; Construit avec Claude Code.</p>
+        <ul class="footer__social">
+          <li><a href="https://github.com/ttoure" aria-label="GitHub" target="_blank" rel="noopener">GitHub</a></li>
+          <li><a href="#" aria-label="LinkedIn">LinkedIn</a></li>
+        </ul>
+      </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+  </body>
+</html>

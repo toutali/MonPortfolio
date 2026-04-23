@@ -1,0 +1,633 @@
+/* =========================================================
+   MonPortfolio — main stylesheet
+   Mobile-first, dark theme default, vanilla CSS
+   ========================================================= */
+
+/* ---------------------------------------------------------
+   1. CSS Custom Properties — Dark theme (default)
+   --------------------------------------------------------- */
+:root {
+  color-scheme: dark;
+
+  --color-bg:            #0a0a0a;
+  --color-bg-surface:    #111111;
+  --color-bg-card:       #1a1a1a;
+  --color-border:        #2a2a2a;
+  --color-text:          #e0e0e0;
+  --color-text-muted:    #888888;
+  --color-accent:        #64ffda;
+  --color-accent-hover:  #4fd9b8;
+  --color-accent-subtle: rgba(100, 255, 218, 0.1);
+  --color-header-bg:     rgba(10, 10, 10, 0.85);
+  --color-btn-text:      #0a0a0a;
+
+  /* Typography */
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --text-xs:   0.75rem;
+  --text-sm:   0.875rem;
+  --text-base: 1rem;
+  --text-lg:   1.125rem;
+  --text-xl:   1.25rem;
+  --text-2xl:  1.5rem;
+  --text-3xl:  1.875rem;
+  --text-4xl:  2.25rem;
+  --text-5xl:  3rem;
+
+  /* Spacing */
+  --space-1:  0.25rem;
+  --space-2:  0.5rem;
+  --space-3:  0.75rem;
+  --space-4:  1rem;
+  --space-6:  1.5rem;
+  --space-8:  2rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-24: 6rem;
+
+  /* Layout */
+  --container-max: 1100px;
+  --radius:        0.5rem;
+  --nav-height:    4rem;
+
+  /* Transitions */
+  --transition:       200ms ease;
+  --transition-theme: 0.3s ease;
+}
+
+/* ---------------------------------------------------------
+   Light theme overrides
+   --------------------------------------------------------- */
+html[data-theme="light"] {
+  color-scheme: light;
+
+  --color-bg:            #ffffff;
+  --color-bg-surface:    #f0f0f0;
+  --color-bg-card:       #f5f5f5;
+  --color-border:        #e0e0e0;
+  --color-text:          #1a1a1a;
+  --color-text-muted:    #555555;
+  --color-accent:        #0d9373;
+  --color-accent-hover:  #0b7a61;
+  --color-accent-subtle: rgba(13, 147, 115, 0.1);
+  --color-header-bg:     rgba(255, 255, 255, 0.85);
+  --color-btn-text:      #ffffff;
+}
+
+/* ---------------------------------------------------------
+   2. CSS Reset
+   --------------------------------------------------------- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+  transition: background-color var(--transition-theme), color var(--transition-theme);
+}
+
+img, svg {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+button, input, textarea {
+  font: inherit;
+}
+
+/* ---------------------------------------------------------
+   3. Layout utilities
+   --------------------------------------------------------- */
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--space-6);
+}
+
+.section {
+  padding-block: var(--space-24);
+}
+
+.section__title {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 700;
+  margin-bottom: var(--space-12);
+  position: relative;
+  display: inline-block;
+}
+
+.section__title::after {
+  content: '';
+  display: block;
+  width: 2.5rem;
+  height: 3px;
+  background: var(--color-accent);
+  margin-top: var(--space-2);
+  border-radius: 2px;
+  transition: background-color var(--transition-theme);
+}
+
+/* ---------------------------------------------------------
+   4. Buttons
+   --------------------------------------------------------- */
+.btn {
+  display: inline-block;
+  padding: var(--space-3) var(--space-6);
+  border-radius: var(--radius);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: background-color var(--transition), color var(--transition),
+              border-color var(--transition);
+}
+
+.btn--primary {
+  background-color: var(--color-accent);
+  color: var(--color-btn-text);
+}
+
+.btn--primary:hover {
+  background-color: var(--color-accent-hover);
+}
+
+.btn--outline {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.btn--outline:hover {
+  background-color: var(--color-accent);
+  color: var(--color-btn-text);
+}
+
+.btn--ghost {
+  color: var(--color-text-muted);
+  border-color: var(--color-border);
+}
+
+.btn--ghost:hover {
+  color: var(--color-text);
+  border-color: var(--color-text-muted);
+}
+
+/* ---------------------------------------------------------
+   5. Header & Nav
+   --------------------------------------------------------- */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: var(--color-header-bg);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--color-border);
+  transition: background-color var(--transition-theme), border-color var(--transition-theme);
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--nav-height);
+}
+
+.nav__logo {
+  font-weight: 700;
+  font-size: var(--text-lg);
+  color: var(--color-accent);
+  letter-spacing: -0.02em;
+  transition: color var(--transition-theme);
+}
+
+.nav__links {
+  display: none;
+}
+
+.nav__links a {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  transition: color var(--transition);
+}
+
+.nav__links a:hover {
+  color: var(--color-text);
+}
+
+.nav__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.nav__theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  color: var(--color-text-muted);
+  transition: color var(--transition);
+}
+
+.nav__theme-toggle:hover {
+  color: var(--color-text);
+}
+
+/* Dark mode (default): show sun, hide moon */
+.icon-moon { display: none; }
+
+/* Light mode: hide sun, show moon */
+html[data-theme="light"] .icon-sun  { display: none; }
+html[data-theme="light"] .icon-moon { display: block; }
+
+.nav__toggle {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 2rem;
+  height: 2rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.nav__hamburger,
+.nav__hamburger::before,
+.nav__hamburger::after {
+  display: block;
+  width: 1.5rem;
+  height: 2px;
+  background: var(--color-text);
+  border-radius: 2px;
+  transition: transform var(--transition), opacity var(--transition);
+}
+
+.nav__hamburger {
+  position: relative;
+}
+
+.nav__hamburger::before,
+.nav__hamburger::after {
+  content: '';
+  position: absolute;
+  left: 0;
+}
+
+.nav__hamburger::before { top: -6px; }
+.nav__hamburger::after  { top:  6px; }
+
+.nav__toggle[aria-expanded="true"] .nav__hamburger {
+  background: transparent;
+}
+
+.nav__toggle[aria-expanded="true"] .nav__hamburger::before {
+  transform: translateY(6px) rotate(45deg);
+}
+
+.nav__toggle[aria-expanded="true"] .nav__hamburger::after {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
+.nav__links.is-open {
+  display: flex;
+  position: fixed;
+  inset: 0;
+  z-index: 99;
+  background: var(--color-bg);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-8);
+  transition: background-color var(--transition-theme);
+}
+
+.nav__links.is-open a {
+  font-size: var(--text-2xl);
+  color: var(--color-text);
+}
+
+/* ---------------------------------------------------------
+   6. Hero
+   --------------------------------------------------------- */
+.hero {
+  min-height: calc(100vh - var(--nav-height));
+  display: flex;
+  align-items: center;
+  padding-block: var(--space-24);
+}
+
+.hero__content {
+  max-width: 640px;
+}
+
+.hero__eyebrow {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-3);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.hero__title {
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  margin-bottom: var(--space-4);
+}
+
+.hero__subtitle {
+  font-size: var(--text-xl);
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-4);
+}
+
+.hero__tagline {
+  font-size: var(--text-lg);
+  color: var(--color-text);
+  margin-bottom: var(--space-8);
+  opacity: 0.8;
+}
+
+/* ---------------------------------------------------------
+   7. About
+   --------------------------------------------------------- */
+.about {
+  background-color: var(--color-bg-surface);
+}
+
+.about__grid {
+  display: grid;
+  gap: var(--space-8);
+}
+
+.about__photo {
+  aspect-ratio: 1;
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.about__photo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.about__text p {
+  color: var(--color-text-muted);
+  line-height: 1.8;
+}
+
+/* ---------------------------------------------------------
+   8. Projects
+   --------------------------------------------------------- */
+.projects__grid {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.card {
+  background-color: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  transition: border-color var(--transition-theme), transform var(--transition-theme),
+              box-shadow var(--transition-theme), background-color var(--transition-theme);
+}
+
+.card:hover {
+  border-color: var(--color-accent);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+}
+
+.card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.card__title {
+  font-size: var(--text-lg);
+  font-weight: 600;
+}
+
+.card__body {
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+  line-height: 1.7;
+  flex: 1;
+}
+
+.card__banner {
+  height: 4px;
+  background: var(--color-accent);
+  border-radius: var(--radius) var(--radius) 0 0;
+  margin: calc(-1 * var(--space-6)) calc(-1 * var(--space-6)) 0;
+  transition: background-color var(--transition-theme);
+}
+
+.card__techs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.card__tech {
+  font-size: var(--text-xs);
+  color: var(--color-accent);
+  background-color: var(--color-accent-subtle);
+  padding: var(--space-1) var(--space-3);
+  border-radius: 999px;
+  transition: background-color var(--transition-theme), color var(--transition-theme);
+}
+
+.card__links {
+  display: flex;
+  gap: var(--space-3);
+}
+
+/* ---------------------------------------------------------
+   9. Contact
+   --------------------------------------------------------- */
+.contact {
+  background-color: var(--color-bg-surface);
+}
+
+.contact__inner {
+  max-width: 600px;
+}
+
+.contact__lead {
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-8);
+}
+
+.contact__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.form__group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.form__group label {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-text-muted);
+}
+
+.form__group input,
+.form__group textarea {
+  background-color: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: var(--space-3) var(--space-4);
+  color: var(--color-text);
+  transition: border-color var(--transition), background-color var(--transition-theme), color var(--transition-theme);
+  resize: vertical;
+}
+
+.form__group input:focus,
+.form__group textarea:focus {
+  outline: none;
+  border-color: var(--color-accent);
+}
+
+.form__group input::placeholder,
+.form__group textarea::placeholder {
+  color: var(--color-text-muted);
+  opacity: 0.6;
+}
+
+/* ---------------------------------------------------------
+   10. Footer
+   --------------------------------------------------------- */
+.footer {
+  border-top: 1px solid var(--color-border);
+  padding-block: var(--space-8);
+  transition: border-color var(--transition-theme);
+}
+
+.footer__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  text-align: center;
+}
+
+.footer__copy {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  opacity: 0.7;
+}
+
+.footer__social {
+  display: flex;
+  gap: var(--space-6);
+}
+
+.footer__social a {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  transition: color var(--transition);
+}
+
+.footer__social a:hover {
+  color: var(--color-accent);
+}
+
+/* ---------------------------------------------------------
+   11. Responsive — tablet (≥ 640px)
+   --------------------------------------------------------- */
+@media (min-width: 640px) {
+  .nav__toggle {
+    display: none;
+  }
+
+  .nav__links {
+    display: flex;
+    gap: var(--space-6);
+  }
+
+  .about__grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .projects__grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .footer__inner {
+    flex-direction: row;
+    justify-content: space-between;
+    text-align: left;
+  }
+}
+
+/* ---------------------------------------------------------
+   12. Responsive — desktop (≥ 1024px)
+   --------------------------------------------------------- */
+@media (min-width: 1024px) {
+  .projects__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ---------------------------------------------------------
+   13. Reveal animation (Intersection Observer)
+   --------------------------------------------------------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out,
+              background-color var(--transition-theme);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
