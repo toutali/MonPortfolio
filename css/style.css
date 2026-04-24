@@ -395,6 +395,15 @@ html[data-theme="light"] .icon-moon { display: block; }
   aspect-ratio: 1;
   border-radius: var(--radius);
   overflow: hidden;
+  max-width: 280px;
+  margin-inline: auto;
+}
+
+@media (min-width: 640px) {
+  .about__photo {
+    max-width: none;
+    margin-inline: 0;
+  }
 }
 
 .about__photo-img {

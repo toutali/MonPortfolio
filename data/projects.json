@@ -1,9 +1,10 @@
 [
   {
     "name": "MonPortfolio",
-    "description": "Mon portfolio développeur, construit entièrement avec Claude Code.",
+    "description": "Portfolio personnel — site statique HTML5, CSS3, JavaScript vanilla",
     "techs": ["HTML", "CSS", "JavaScript", "Claude Code"],
-    "url": "https://github.com/toutali/MonPortfolio"
+    "url": "https://github.com/toutali/MonPortfolio",
+    "stars": 0
   },
   {
     "name": "Calculatrice CLI",
