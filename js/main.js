@@ -9,16 +9,31 @@ function initNav() {
 
   if (!toggle || !links) return;
 
+  function openMenu() {
+    links.classList.add('is-open');
+    toggle.setAttribute('aria-expanded', 'true');
+    toggle.setAttribute('aria-label', 'Fermer le menu');
+    const firstLink = links.querySelector('a');
+    if (firstLink) firstLink.focus();
+  }
+
+  function closeMenu() {
+    links.classList.remove('is-open');
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.setAttribute('aria-label', 'Ouvrir le menu');
+    toggle.focus();
+  }
+
   toggle.addEventListener('click', () => {
-    const isOpen = links.classList.toggle('is-open');
-    toggle.setAttribute('aria-expanded', String(isOpen));
+    links.classList.contains('is-open') ? closeMenu() : openMenu();
   });
 
   links.querySelectorAll('a').forEach(link => {
-    link.addEventListener('click', () => {
-      links.classList.remove('is-open');
-      toggle.setAttribute('aria-expanded', 'false');
-    });
+    link.addEventListener('click', closeMenu);
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && links.classList.contains('is-open')) closeMenu();
   });
 }
 
@@ -100,7 +115,78 @@ function loadProjects() {
     });
 }
 
+function initContactForm() {
+  const form = document.getElementById('contactForm');
+  if (!form) return;
+
+  const fields = [
+    { id: 'name',    validate: v => v.trim().length > 0 ? null : 'Veuillez entrer votre nom.' },
+    { id: 'email',   validate: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()) ? null : 'Veuillez entrer une adresse e-mail valide.' },
+    { id: 'message', validate: v => v.trim().length > 0 ? null : 'Veuillez entrer votre message.' },
+  ];
+
+  const liveRegion = document.createElement('div');
+  liveRegion.setAttribute('role', 'alert');
+  liveRegion.setAttribute('aria-live', 'polite');
+  liveRegion.className = 'sr-only';
+  form.parentNode.insertBefore(liveRegion, form);
+
+  function clearFieldError(input) {
+    const errorEl = document.getElementById(input.id + '-error');
+    if (errorEl) errorEl.remove();
+    input.removeAttribute('aria-invalid');
+    input.removeAttribute('aria-describedby');
+  }
+
+  function setFieldError(input, message) {
+    clearFieldError(input);
+    input.setAttribute('aria-invalid', 'true');
+    const errorEl = document.createElement('span');
+    errorEl.id = input.id + '-error';
+    errorEl.className = 'form__error';
+    errorEl.textContent = message;
+    input.insertAdjacentElement('afterend', errorEl);
+    input.setAttribute('aria-describedby', errorEl.id);
+  }
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    liveRegion.textContent = '';
+
+    let firstInvalid = null;
+    let hasError = false;
+
+    fields.forEach(({ id, validate }) => {
+      const input = document.getElementById(id);
+      const error = validate(input.value);
+      if (error) {
+        setFieldError(input, error);
+        if (!firstInvalid) firstInvalid = input;
+        hasError = true;
+      } else {
+        clearFieldError(input);
+      }
+    });
+
+    if (hasError) {
+      firstInvalid.focus();
+      liveRegion.textContent = 'Le formulaire contient des erreurs. Veuillez les corriger.';
+      return;
+    }
+
+    form.reset();
+    fields.forEach(({ id }) => clearFieldError(document.getElementById(id)));
+    liveRegion.textContent = 'Message envoyé avec succès. Merci !';
+  });
+
+  fields.forEach(({ id }) => {
+    const input = document.getElementById(id);
+    input.addEventListener('input', () => clearFieldError(input));
+  });
+}
+
 initNav();
 initTheme();
 initReveal();
 loadProjects();
+initContactForm();

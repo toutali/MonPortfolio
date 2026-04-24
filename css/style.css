@@ -20,6 +20,7 @@
   --color-accent-subtle: rgba(100, 255, 218, 0.1);
   --color-header-bg:     rgba(10, 10, 10, 0.85);
   --color-btn-text:      #0a0a0a;
+  --color-error:         #ff6b6b;
 
   /* Typography */
   --font-sans: 'Inter', system-ui, sans-serif;
@@ -66,11 +67,12 @@ html[data-theme="light"] {
   --color-border:        #e0e0e0;
   --color-text:          #1a1a1a;
   --color-text-muted:    #555555;
-  --color-accent:        #0d9373;
-  --color-accent-hover:  #0b7a61;
-  --color-accent-subtle: rgba(13, 147, 115, 0.1);
+  --color-accent:        #096b54;
+  --color-accent-hover:  #07543f;
+  --color-accent-subtle: rgba(9, 107, 84, 0.1);
   --color-header-bg:     rgba(255, 255, 255, 0.85);
   --color-btn-text:      #ffffff;
+  --color-error:         #c0392b;
 }
 
 /* ---------------------------------------------------------
@@ -82,8 +84,10 @@ html[data-theme="light"] {
   padding: 0;
 }
 
-html {
-  scroll-behavior: smooth;
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 body {
@@ -524,7 +528,6 @@ html[data-theme="light"] .icon-moon { display: block; }
 
 .form__group input:focus,
 .form__group textarea:focus {
-  outline: none;
   border-color: var(--color-accent);
 }
 
@@ -630,4 +633,32 @@ html[data-theme="light"] .icon-moon { display: block; }
     transform: none;
     transition: none;
   }
+}
+
+/* ---------------------------------------------------------
+   14. Accessibilité — focus et utilitaires
+   --------------------------------------------------------- */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: var(--radius);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.form__error {
+  display: block;
+  font-size: var(--text-xs);
+  color: var(--color-error);
+  margin-top: var(--space-1);
 }
