@@ -11,7 +11,7 @@
     <title>Taliby TOURE — Portfolio</title>
     <script>
       (function () {
-        var t = localStorage.getItem('theme') ||
+        const t = localStorage.getItem('theme') ||
                 (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
         document.documentElement.setAttribute('data-theme', t);
       }());
@@ -79,7 +79,7 @@
           <h2 class="section__title">À propos</h2>
           <div class="about__grid">
             <div class="about__photo">
-              <img src="assets/images/PSG6.jpg" alt="Photo de Taliby TOURE" class="about__photo-img" loading="lazy" />
+              <img src="assets/images/PSG6.jpg" alt="Photo de Taliby TOURE" class="about__photo-img" width="1200" height="1200" loading="lazy" />
             </div>
             <div class="about__text">
               <p>
@@ -139,6 +139,6 @@
       </div>
     </footer>
 
-    <script src="js/main.js"></script>
+    <script src="js/main.js" defer></script>
   </body>
 </html>

@@ -50,17 +50,12 @@ function initTheme() {
     );
   }
 
-  function getInitialTheme() {
-    const saved = localStorage.getItem('theme');
-    if (saved) return saved;
-    return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
-  }
-
-  applyTheme(getInitialTheme());
+  // Le thème est déjà appliqué par le script inline dans <head> — on synchronise uniquement l'aria-label
+  const initial = html.getAttribute('data-theme') || 'dark';
+  btn.setAttribute('aria-label', initial === 'dark' ? 'Passer en mode clair' : 'Passer en mode sombre');
 
   btn.addEventListener('click', () => {
-    const current = html.getAttribute('data-theme');
-    applyTheme(current === 'dark' ? 'light' : 'dark');
+    applyTheme(html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
   });
 }
 
@@ -84,34 +79,77 @@ function loadProjects() {
   const grid = document.getElementById('projectsGrid');
   if (!grid) return;
 
+  function isSafeUrl(url) {
+    if (!url || url === '#') return true;
+    try {
+      const { protocol } = new URL(url, window.location.href);
+      return protocol === 'https:' || protocol === 'http:';
+    } catch {
+      return false;
+    }
+  }
+
+  function buildCard(project) {
+    const article = document.createElement('article');
+    article.className = 'card';
+
+    const banner = document.createElement('div');
+    banner.className = 'card__banner';
+
+    const header = document.createElement('div');
+    header.className = 'card__header';
+    const title = document.createElement('h3');
+    title.className = 'card__title';
+    title.textContent = project.name;
+    header.appendChild(title);
+
+    const body = document.createElement('p');
+    body.className = 'card__body';
+    body.textContent = project.description;
+
+    const techsEl = document.createElement('div');
+    techsEl.className = 'card__techs';
+    (project.techs || []).forEach(t => {
+      const span = document.createElement('span');
+      span.className = 'card__tech';
+      span.textContent = t;
+      techsEl.appendChild(span);
+    });
+
+    const linksEl = document.createElement('div');
+    linksEl.className = 'card__links';
+    const a = document.createElement('a');
+    const safeUrl = isSafeUrl(project.url) ? project.url : '#';
+    const isExternal = project.url && project.url !== '#' && isSafeUrl(project.url);
+    a.href = safeUrl;
+    a.className = 'btn btn--outline';
+    a.textContent = 'Voir le projet';
+    a.setAttribute('aria-label', `Voir le projet ${project.name}`);
+    if (isExternal) {
+      a.target = '_blank';
+      a.rel = 'noopener';
+    }
+    linksEl.appendChild(a);
+
+    article.append(banner, header, body, techsEl, linksEl);
+    return article;
+  }
+
   fetch('data/projects.json')
     .then(res => {
       if (!res.ok) throw new Error('Réponse réseau invalide');
       return res.json();
     })
     .then(projects => {
-      grid.innerHTML = projects.map(project => {
-        const techs = project.techs
-          .map(t => `<span class="card__tech">${t}</span>`)
-          .join('');
-        const isExternal = project.url && project.url !== '#';
-        const linkAttrs = isExternal ? ' target="_blank" rel="noopener"' : '';
-        return `
-          <article class="card">
-            <div class="card__banner"></div>
-            <div class="card__header">
-              <h3 class="card__title">${project.name}</h3>
-            </div>
-            <p class="card__body">${project.description}</p>
-            <div class="card__techs">${techs}</div>
-            <div class="card__links">
-              <a href="${project.url}" class="btn btn--outline" aria-label="Voir le projet ${project.name}"${linkAttrs}>Voir le projet</a>
-            </div>
-          </article>`;
-      }).join('');
+      const fragment = document.createDocumentFragment();
+      projects.forEach(project => fragment.appendChild(buildCard(project)));
+      grid.replaceChildren(fragment);
     })
     .catch(() => {
-      grid.innerHTML = '<p class="projects__error">Impossible de charger les projets.</p>';
+      const p = document.createElement('p');
+      p.className = 'projects__error';
+      p.textContent = 'Impossible de charger les projets.';
+      grid.replaceChildren(p);
     });
 }
 
