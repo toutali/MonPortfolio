@@ -1,0 +1,121 @@
+name: Validation et déploiement
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: index.html existe
+        run: test -f index.html
+
+      - name: Syntaxe JavaScript
+        run: |
+          for f in js/*.js; do
+            echo "→ $f"
+            node --check "$f"
+          done
+
+      - name: Syntaxe CSS (accolades équilibrées)
+        run: |
+          python3 - <<'EOF'
+          import sys, glob
+          files = glob.glob('css/*.css')
+          if not files:
+              print("Aucun fichier CSS trouvé")
+              sys.exit(1)
+          errors = []
+          for path in files:
+              text = open(path, encoding='utf-8').read()
+              if text.count('{') != text.count('}'):
+                  errors.append(f"{path}: accolades déséquilibrées ({text.count('{')} ouvrantes, {text.count('}')} fermantes)")
+          if errors:
+              for e in errors:
+                  print(f"ERREUR: {e}")
+              sys.exit(1)
+          print(f"CSS OK ({len(files)} fichier(s) vérifié(s))")
+          EOF
+
+      - name: Validation HTML (balises non fermées)
+        run: |
+          python3 - <<'EOF'
+          from html.parser import HTMLParser
+          import sys
+
+          VOID_ELEMENTS = {
+              'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input',
+              'link', 'meta', 'param', 'source', 'track', 'wbr'
+          }
+
+          class Validator(HTMLParser):
+              def __init__(self):
+                  super().__init__()
+                  self.stack = []
+                  self.errors = []
+
+              def handle_starttag(self, tag, attrs):
+                  if tag not in VOID_ELEMENTS:
+                      self.stack.append(tag)
+
+              def handle_endtag(self, tag):
+                  if tag in VOID_ELEMENTS:
+                      return
+                  if self.stack and self.stack[-1] == tag:
+                      self.stack.pop()
+                  else:
+                      expected = self.stack[-1] if self.stack else 'rien'
+                      self.errors.append(
+                          f"</{tag}> inattendu (attendu: </{expected}>)"
+                      )
+
+          with open('index.html', encoding='utf-8') as f:
+              content = f.read()
+
+          v = Validator()
+          v.feed(content)
+
+          if v.errors:
+              for e in v.errors:
+                  print(f"ERREUR: {e}")
+              sys.exit(1)
+
+          if v.stack:
+              print(f"ERREUR: balises non fermées: {v.stack}")
+              sys.exit(1)
+
+          print("HTML OK — aucune balise non fermée détectée")
+          EOF
+
+  deploy:
+    needs: validate
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configurer GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Uploader l'artifact Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+      - name: Déployer sur GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
